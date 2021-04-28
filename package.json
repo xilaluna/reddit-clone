@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/xiluna/reddit-clone/issues"
   },
-  "homepage": "https://github.com/xiluna/reddit-clone#readme"
+  "homepage": "https://github.com/xiluna/reddit-clone#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.0"
+  }
 }
