@@ -19,6 +19,10 @@ app.get("/", (req, res) => {
   res.render("home")
 })
 
+app.get("/posts/new", (req, res) => {
+  res.render("posts-new")
+})
+
 app.listen(3000, () => {
   console.log(`Reddit clone listening at http://localhost:3000`)
 })
