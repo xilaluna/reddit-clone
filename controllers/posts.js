@@ -12,6 +12,17 @@ module.exports = (app) => {
       })
   })
 
+  app.get("/n/:subreddit", function (req, res) {
+    Post.find({ subreddit: req.params.subreddit })
+      .lean()
+      .then((posts) => {
+        res.render("posts-index", { posts })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  })
+
   app.get("/posts/new", (req, res) => {
     res.render("posts-new")
   })
