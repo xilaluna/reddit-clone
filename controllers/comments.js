@@ -7,6 +7,8 @@ module.exports = function (app) {
     // INSTANTIATE INSTANCE OF MODEL
     const comment = new Comment(req.body)
 
+    comment.author = req.user._id
+
     // SAVE INSTANCE OF Comment MODEL TO DB
     comment
       .save()
@@ -14,11 +16,17 @@ module.exports = function (app) {
         return Post.findById(req.params.postId)
       })
       .then((post) => {
-        // unshift - adds an element to the front of an array
         post.comments.unshift(comment)
         return post.save()
       })
-      .then((post) => {
+      .then(() => {
+        return User.findById(req.user._id)
+      })
+      .then((user) => {
+        user.comments.unshift(comment)
+        return user.save()
+      })
+      .then(() => {
         res.redirect(`/`)
       })
       .catch((err) => {
