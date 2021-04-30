@@ -22,10 +22,6 @@ module.exports = (app) => {
         return res.status(400).send({ err: err })
       })
   })
-  app.get("/logout", (req, res) => {
-    res.clearCookie("nToken")
-    res.redirect("/")
-  })
   app.get("/login", (req, res) => {
     res.render("login")
   })
@@ -58,5 +54,10 @@ module.exports = (app) => {
       .catch((err) => {
         console.log(err)
       })
+  })
+
+  app.get("/logout", (req, res) => {
+    res.clearCookie("nToken")
+    res.redirect("/")
   })
 }
