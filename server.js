@@ -29,9 +29,10 @@ var checkAuth = (req, res, next) => {
 }
 app.use(checkAuth)
 
-require("./controllers/posts.js")(app)
+require("./controllers/posts")(app)
 require("./controllers/comments.js")(app)
 require("./controllers/auth.js")(app)
+require("./controllers/replies.js")(app)
 require("./data/reddit-db")
 
 app.listen(3000, () => {
