@@ -9,6 +9,9 @@ const PostSchema = new Schema({
   subreddit: { type: String, required: true },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  upVotes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  downVotes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  voteScore: { type: Number },
 })
 // Always populate the author field
 PostSchema.pre("findOne", Populate("author")).pre("find", Populate("author"))

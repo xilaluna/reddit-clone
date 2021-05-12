@@ -11,6 +11,7 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(expressValidator())
+app.use(express.static("public"))
 
 const exphbs = require("express-handlebars")
 app.engine("handlebars", exphbs({ defaultLayout: "main" }))
