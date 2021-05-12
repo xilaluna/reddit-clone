@@ -19,14 +19,15 @@ module.exports = (app) => {
       })
   })
 
+  app.get("/posts/new", (req, res) => {
+    console.log("Loading posts-new")
+    res.render("posts-new")
+  })
+
   // CREATE
   app.post("/posts/new", (req, res) => {
     if (req.user) {
       var post = new Post(req.body)
-      post.author = req.user._id
-      post.upVotes = []
-      post.downVotes = []
-      post.voteScore = 0
 
       post
         .save()
@@ -36,21 +37,29 @@ module.exports = (app) => {
         .then((user) => {
           user.posts.unshift(post)
           user.save()
-
+          // REDIRECT TO THE NEW POST
           res.redirect(`/posts/${post._id}`)
         })
         .catch((err) => {
           console.log(err.message)
         })
     } else {
-      return res.sendStatus(401) // UNAUTHORIZED
+      return res.status(401) // UNAUTHORIZED
     }
   })
 
-  app.get("/posts/new", (req, res) => {
-    let currentUser = req.user
-
-    res.render("posts-new", { currentUser })
+  // SHOW
+  app.get("/posts/:id", function (req, res) {
+    var currentUser = req.user
+    Post.findById(req.params.id)
+      .populate("comments")
+      .lean()
+      .then((post) => {
+        res.render("posts-show", { post, currentUser })
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
   })
 
   // SUBREDDIT
@@ -58,28 +67,11 @@ module.exports = (app) => {
     var currentUser = req.user
     Post.find({ subreddit: req.params.subreddit })
       .lean()
-      .populate("author")
       .then((posts) => {
         res.render("posts-index", { posts, currentUser })
       })
       .catch((err) => {
         console.log(err)
-      })
-  })
-
-  // can search post by id
-  app.get("/posts/:id", function (req, res) {
-    var currentUser = req.user
-    // LOOK UP THE POST
-    Post.findById(req.params.id)
-      .lean()
-      .populate({ path: "comments", populate: { path: "author" } })
-      .populate("author")
-      .then((post) => {
-        res.render("posts-show", { post, currentUser })
-      })
-      .catch((err) => {
-        console.log(err.message)
       })
   })
 }
